@@ -1,4 +1,7 @@
-.react-router
-build
-node_modules
-README.md
+/node_modules
+*.log
+.DS_Store
+.env
+/.cache
+/public/build
+/build

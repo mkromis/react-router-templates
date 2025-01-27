@@ -1,15 +1,26 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.node.json" },
-    { "path": "./tsconfig.vite.json" }
-  ],
+  "exclude": ["./cypress", "./cypress.config.ts"],
+  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
   "compilerOptions": {
-    "checkJs": true,
-    "forceConsistentCasingInFileNames": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
+    "types": ["vitest/globals"],
     "isolatedModules": true,
-    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "ES2020",
     "strict": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./app/*"]
+    },
+    "skipLibCheck": true,
+
+    // Remix takes care of building everything in `remix build`.
     "noEmit": true
   }
 }

@@ -1,7 +1,17 @@
-.env
-!.env.example
-.DS_Store
-.react-router
-build
+# We don't want lockfiles in stacks, as people could use a different package manager
+# This part will be removed by `remix.init`
+bun.lockb
+package-lock.json
+pnpm-lock.yaml
+pnpm-lock.yml
+yarn.lock
+
 node_modules
-*.tsbuildinfo
+
+/build
+/public/build
+.env
+
+/cypress/screenshots
+/cypress/videos
+/postgres-data
