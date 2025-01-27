@@ -20,23 +20,25 @@ A modern, production-ready template for building full-stack React applications u
 Install the dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Development
 
 Copy `.env.example` to `.env` and provide a `DATABASE_URL` with your connection string.
+Example local connection
+`postgresql://postgres:postgres@localhost:5432/<databasename>`
 
 Run an initial database migration:
 
 ```bash
-npm run db:migrate
+pnpm run db:migrate
 ```
 
 Start the development server with HMR:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Your application will be available at `http://localhost:5173`.
@@ -46,7 +48,7 @@ Your application will be available at `http://localhost:5173`.
 Create a production build:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 ## Deployment
@@ -62,17 +64,11 @@ This template includes three Dockerfiles optimized for different package manager
 To build and run using Docker:
 
 ```bash
-# For npm
-docker build -t my-app .
-
-# For pnpm
-docker build -f Dockerfile.pnpm -t my-app .
-
-# For bun
-docker build -f Dockerfile.bun -t my-app .
+# Build Image
+docker build -t node-media-manager .
 
 # Run the container
-docker run -p 3000:3000 my-app
+docker run -p 3000:3000 node-media-manager
 ```
 
 The containerized application can be deployed to any platform that supports Docker, including:
@@ -93,7 +89,7 @@ Make sure to deploy the output of `npm run build`
 ```
 ├── package.json
 ├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── server.js
+├── server.ts
 ├── build/
 │   ├── client/    # Static assets
 │   └── server/    # Server-side code
