@@ -1,14 +1,12 @@
-import { cssBundleHref } from "@react-router/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "react-router";
 import { json } from "react-router";
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
 import { getUser } from "~/session.server";
-import stylesheet from "~/tailwind.css";
+import stylesheet from "~/tailwind.css?url";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -28,7 +26,6 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );
