@@ -34,6 +34,7 @@
     "@isaacs/express-prometheus-middleware": "^1.2.1",
     "@prisma/client": "^5.20.0",
     "@react-router/express": "*",
+    "@react-router/fs-routes": "^7.1.3",
     "@react-router/node": "*",
     "bcryptjs": "^2.4.3",
     "chokidar": "^3.6.0",
