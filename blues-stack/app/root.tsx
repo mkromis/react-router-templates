@@ -1,6 +1,5 @@
 import type { LinksFunction, LoaderFunctionArgs } from "react-router";
-import { json } from "react-router";
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
 import { getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css?url";
@@ -10,7 +9,7 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return json({ user: await getUser(request) });
+  return { user: await getUser(request) };
 };
 
 export default function App() {

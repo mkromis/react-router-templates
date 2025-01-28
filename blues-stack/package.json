@@ -2,19 +2,21 @@
   "name": "blues-stack-template",
   "private": true,
   "sideEffects": false,
+  "type": "module",
   "scripts": {
     "build": "npm-run-all --sequential build:*",
     "build:client": "react-router build",
-    "build:server": "esbuild --platform=node --format=cjs ./server.ts --outdir=build --bundle --external:fsevents",
+    "build:server": "esbuild --platform=node --format=cjs server/server.ts --outdir=build --bundle --external:fsevents",
     "dev": "npm-run-all --parallel dev:*",
     "dev:server": "cross-env NODE_ENV=development npm run build:server -- --watch",
-    "dev:client": "react-router dev --manual -c \"node --require ./mocks --watch-path ./build/server.js --watch ./build/server.js\"",
+    "dev:client": "react-router dev",
+    "old:dev:client": "react-router dev -c \"node --require ./mocks --watch-path ./build/server.js --watch ./build/server.js\"",
     "docker": "docker compose up -d",
     "format": "prettier --write .",
     "format:repo": "npm run format && npm run lint -- --fix",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "setup": "prisma generate && prisma migrate deploy && prisma db seed",
-    "start": "react-router-serve ./build/server.js",
+    "start": "react-router serve ./build/server.js",
     "start:old": "cross-env NODE_ENV=production node ./build/server.js",
     "start:mocks": "cross-env NODE_ENV=production node --require ./mocks --require dotenv/config ./build/server.js",
     "test": "vitest",
@@ -54,6 +56,7 @@
     "@faker-js/faker": "^9.0.3",
     "@react-router/dev": "*",
     "@tailwindcss/postcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0",
     "@testing-library/cypress": "^10.0.2",
     "@testing-library/jest-dom": "^6.5.0",
     "@types/bcryptjs": "^2.4.6",
@@ -89,7 +92,6 @@
     "happy-dom": "^15.7.4",
     "msw": "^2.4.9",
     "npm-run-all2": "^6.2.3",
-    "postcss": "^8.4.47",
     "prettier": "3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "prisma": "^5.20.0",
@@ -102,7 +104,7 @@
     "vitest": "^2.1.2"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
