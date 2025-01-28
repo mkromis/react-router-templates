@@ -3,9 +3,9 @@ import path from "node:path";
 import url from "node:url";
 
 import prom from "@isaacs/express-prometheus-middleware";
-import { createRequestHandler } from "@remix-run/express";
-import type { ServerBuild } from "@remix-run/node";
-import { broadcastDevReady, installGlobals } from "@remix-run/node";
+import { createRequestHandler } from "@react-router/express";
+import type { ServerBuild } from "react-router";
+import { broadcastDevReady, installGlobals } from "react-router";
 import compression from "compression";
 import type { RequestHandler } from "express";
 import express from "express";

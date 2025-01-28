@@ -6,9 +6,9 @@
 
 import { PassThrough } from "node:stream";
 
-import type { EntryContext } from "@remix-run/node";
-import { createReadableStreamFromReadable } from "@remix-run/node";
-import { RemixServer } from "@remix-run/react";
+import type { EntryContext } from "react-router";
+import { createReadableStreamFromReadable } from "@react-router/node";
+import { ServerRouter } from "react-router";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 
@@ -18,20 +18,20 @@ export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
 ) {
   return isbot(request.headers.get("user-agent"))
     ? handleBotRequest(
         request,
         responseStatusCode,
         responseHeaders,
-        remixContext,
+        reactRouterContext,
       )
     : handleBrowserRequest(
         request,
         responseStatusCode,
         responseHeaders,
-        remixContext,
+        reactRouterContext,
       );
 }
 
@@ -39,12 +39,12 @@ function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
 ) {
   return new Promise((resolve, reject) => {
     const { abort, pipe } = renderToPipeableStream(
-      <RemixServer
-        context={remixContext}
+      <ServerRouter
+        context={reactRouterContext}
         url={request.url}
         abortDelay={ABORT_DELAY}
       />,
@@ -81,12 +81,12 @@ function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
 ) {
   return new Promise((resolve, reject) => {
     const { abort, pipe } = renderToPipeableStream(
-      <RemixServer
-        context={remixContext}
+      <ServerRouter
+        context={reactRouterContext}
         url={request.url}
         abortDelay={ABORT_DELAY}
       />,

@@ -1,6 +1,6 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "react-router";
+import { json } from "react-router";
+import { Form, Link, NavLink, Outlet, useLoaderData } from "react-router";
 
 import { getNoteListItems } from "~/models/note.server";
 import { requireUserId } from "~/session.server";
