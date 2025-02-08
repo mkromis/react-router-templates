@@ -1,5 +1,4 @@
 import type { LoaderFunctionArgs } from "react-router";
-import { json } from "react-router";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "react-router";
 
 import { getNoteListItems } from "~/models/note.server";
@@ -9,7 +8,7 @@ import { useUser } from "~/utils";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
   const noteListItems = await getNoteListItems({ userId });
-  return json({ noteListItems });
+  return { noteListItems };
 };
 
 export default function NotesPage() {

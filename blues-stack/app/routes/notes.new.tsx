@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from "react-router";
-import { json, redirect } from "react-router";
+import { redirect } from "react-router";
 import { Form, useActionData } from "react-router";
 import { useEffect, useRef } from "react";
 
@@ -14,17 +14,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const body = formData.get("body");
 
   if (typeof title !== "string" || title.length === 0) {
-    return json(
-      { errors: { body: null, title: "Title is required" } },
-      { status: 400 },
-    );
+    return {
+      errors: { body: null, title: "Title is required" },
+      status: 400,
+    }
   }
 
   if (typeof body !== "string" || body.length === 0) {
-    return json(
-      { errors: { body: "Body is required", title: null } },
-      { status: 400 },
-    );
+    return {
+      errors: { body: "Body is required", title: null },
+      status: 400,
+    }
   }
 
   const note = await createNote({ body, title, userId });

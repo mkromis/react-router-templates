@@ -5,15 +5,16 @@ import url from "node:url";
 import prom from "@isaacs/express-prometheus-middleware";
 import { createRequestHandler } from "@react-router/express";
 import type { ServerBuild } from "react-router";
-import { broadcastDevReady, installGlobals } from "react-router";
+//import { broadcastDevReady, installGlobals } from "react-router";
 import compression from "compression";
 import type { RequestHandler } from "express";
 import express from "express";
 import morgan from "morgan";
 import sourceMapSupport from "source-map-support";
+import { metricsApp } from "./metrics";
 
 sourceMapSupport.install();
-installGlobals();
+//installGlobals();
 run();
 
 async function run() {
@@ -26,11 +27,10 @@ async function run() {
       ? await createDevRequestHandler(initialBuild)
       : createRequestHandler({
           build: initialBuild,
-          mode: initialBuild.mode,
+          //mode: initialBuild.mode,
         });
 
   const app = express();
-  const metricsApp = express();
   app.use(
     prom({
       metricsPath: "/metrics",
@@ -105,15 +105,11 @@ async function run() {
     console.log(`✅ app ready: http://localhost:${port}`);
 
     if (process.env.NODE_ENV === "development") {
-      broadcastDevReady(initialBuild);
+      //broadcastDevReady(initialBuild);
     }
   });
 
-  const metricsPort = process.env.METRICS_PORT || 3010;
 
-  metricsApp.listen(metricsPort, () => {
-    console.log(`✅ metrics ready: http://localhost:${metricsPort}/metrics`);
-  });
 
   async function reimportServer(): Promise<ServerBuild> {
     // cjs: manually remove the server build from the require cache
@@ -140,7 +136,7 @@ async function run() {
       // 1. re-import the server build
       build = await reimportServer();
       // 2. tell Remix that this app server is now up-to-date and ready
-      broadcastDevReady(build);
+      //broadcastDevReady(build);
     }
     const chokidar = await import("chokidar");
     chokidar
