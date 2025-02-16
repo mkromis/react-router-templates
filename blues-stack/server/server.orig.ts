@@ -5,86 +5,21 @@ import url from "node:url";
 import prom from "@isaacs/express-prometheus-middleware";
 import { createRequestHandler } from "@react-router/express";
 import {  ServerBuild } from "react-router";
-//import { broadcastDevReady, installGlobals } from "react-router";
-import compression from "compression";
+
 import type { RequestHandler } from "express";
 import express from "express";
-import morgan from "morgan";
-import sourceMapSupport from "source-map-support";
-import { metricsApp } from "./metrics";
 
-sourceMapSupport.install();
-//installGlobals();
 run();
 
 async function run() {
   const BUILD_PATH = path.resolve("build/index.js");
   const VERSION_PATH = path.resolve("build/version.txt");
 
-  const initialBuild = await reimportServer();
-  const remixHandler =
-    process.env.NODE_ENV === "development"
-      ? await createDevRequestHandler(initialBuild) // Development
-      : createRequestHandler({ // Production
-          build: initialBuild,
-          //mode: initialBuild.mode,
-        });
-
   const app = express();
-  app.use(
-    prom({
-      metricsPath: "/metrics",
-      collectDefaultMetrics: true,
-      metricsApp,
-    }),
-  );
 
-  app.use((req, res, next) => {
-    // helpful headers:
-    res.set("x-fly-region", process.env.FLY_REGION ?? "unknown");
-    res.set("Strict-Transport-Security", `max-age=${60 * 60 * 24 * 365 * 100}`);
 
-    // /clean-urls/ -> /clean-urls
-    if (req.path.endsWith("/") && req.path.length > 1) {
-      const query = req.url.slice(req.path.length);
-      const safepath = req.path.slice(0, -1).replace(/\/+/g, "/");
-      res.redirect(301, safepath + query);
-      return;
-    }
-    next();
-  });
 
-  // if we're not in the primary region, then we need to make sure all
-  // non-GET/HEAD/OPTIONS requests hit the primary region rather than read-only
-  // Postgres DBs.
-  // learn more: https://fly.io/docs/getting-started/multi-region-databases/#replay-the-request
-  app.all("*", function getReplayResponse(req, res, next) {
-    const { method, path: pathname } = req;
-    const { PRIMARY_REGION, FLY_REGION } = process.env;
-
-    const isMethodReplayable = !["GET", "OPTIONS", "HEAD"].includes(method);
-    const isReadOnlyRegion =
-      FLY_REGION && PRIMARY_REGION && FLY_REGION !== PRIMARY_REGION;
-
-    const shouldReplay = isMethodReplayable && isReadOnlyRegion;
-
-    if (!shouldReplay) return next();
-
-    const logInfo = {
-      pathname,
-      method,
-      PRIMARY_REGION,
-      FLY_REGION,
-    };
-    console.info(`Replaying:`, logInfo);
-    res.set("fly-replay", `region=${PRIMARY_REGION}`);
-    return res.sendStatus(409);
-  });
-
-  app.use(compression());
-
-  // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
-  app.disable("x-powered-by");
+  // Compression
 
   // Remix fingerprints its assets so we can cache forever.
   app.use(
@@ -96,18 +31,7 @@ async function run() {
   // more aggressive with this caching.
   app.use(express.static("public", { maxAge: "1h" }));
 
-  app.use(morgan("tiny"));
-
-  app.all("*", remixHandler);
-
-  const port = process.env.PORT || 3000;
-  app.listen(port, () => {
-    console.log(`✅ app ready: http://localhost:${port}`);
-
-    if (process.env.NODE_ENV === "development") {
-      //broadcastDevReady(initialBuild);
-    }
-  });
+  // Start server
 
   async function reimportServer(): Promise<ServerBuild> {
     // cjs: manually remove the server build from the require cache
@@ -136,6 +60,9 @@ async function run() {
       // 2. tell Remix that this app server is now up-to-date and ready
       //broadcastDevReady(build);
     }
+
+    // This is a file watcher to reload server updates?
+    // Not sure if this is needed yet.
     const chokidar = await import("chokidar");
     chokidar
       .watch(VERSION_PATH, { ignoreInitial: true })
