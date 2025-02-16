@@ -1,159 +1,48 @@
-import fs from "node:fs";
-import path from "node:path";
-import url from "node:url";
-
-import prom from "@isaacs/express-prometheus-middleware";
-import { createRequestHandler } from "@react-router/express";
-import type { ServerBuild } from "react-router";
-//import { broadcastDevReady, installGlobals } from "react-router";
 import compression from "compression";
-import type { RequestHandler } from "express";
 import express from "express";
 import morgan from "morgan";
-import sourceMapSupport from "source-map-support";
-import { metricsApp } from "./metrics";
 
-sourceMapSupport.install();
-//installGlobals();
-run();
+// Short-circuit the type-checking of the built output.
+const BUILD_PATH = "./build/server/index.js";
+const DEVELOPMENT = process.env.NODE_ENV === "development";
+const PORT = Number.parseInt(process.env.PORT || "3000");
 
-async function run() {
-  const BUILD_PATH = path.resolve("build/index.js");
-  const VERSION_PATH = path.resolve("build/version.txt");
+const app = express();
 
-  const initialBuild = await reimportServer();
-  const remixHandler =
-    process.env.NODE_ENV === "development"
-      ? await createDevRequestHandler(initialBuild)
-      : createRequestHandler({
-          build: initialBuild,
-          //mode: initialBuild.mode,
-        });
+app.use(compression());
+app.disable("x-powered-by");
 
-  const app = express();
-  app.use(
-    prom({
-      metricsPath: "/metrics",
-      collectDefaultMetrics: true,
-      metricsApp,
-    }),
+if (DEVELOPMENT) {
+  console.log("Starting development server");
+  const viteDevServer = await import("vite").then((vite) =>
+    vite.createServer({
+      server: { middlewareMode: true },
+    })
   );
-
-  app.use((req, res, next) => {
-    // helpful headers:
-    res.set("x-fly-region", process.env.FLY_REGION ?? "unknown");
-    res.set("Strict-Transport-Security", `max-age=${60 * 60 * 24 * 365 * 100}`);
-
-    // /clean-urls/ -> /clean-urls
-    if (req.path.endsWith("/") && req.path.length > 1) {
-      const query = req.url.slice(req.path.length);
-      const safepath = req.path.slice(0, -1).replace(/\/+/g, "/");
-      res.redirect(301, safepath + query);
-      return;
+  app.use(viteDevServer.middlewares);
+  app.use(async (req, res, next) => {
+    try {
+      const source = await viteDevServer.ssrLoadModule("./server/app.ts");
+      return await source.app(req, res, next);
+    } catch (error) {
+      if (typeof error === "object" && error instanceof Error) {
+        viteDevServer.ssrFixStacktrace(error);
+      }
+      next(error);
     }
-    next();
   });
-
-  // if we're not in the primary region, then we need to make sure all
-  // non-GET/HEAD/OPTIONS requests hit the primary region rather than read-only
-  // Postgres DBs.
-  // learn more: https://fly.io/docs/getting-started/multi-region-databases/#replay-the-request
-  app.all("*", function getReplayResponse(req, res, next) {
-    const { method, path: pathname } = req;
-    const { PRIMARY_REGION, FLY_REGION } = process.env;
-
-    const isMethodReplayable = !["GET", "OPTIONS", "HEAD"].includes(method);
-    const isReadOnlyRegion =
-      FLY_REGION && PRIMARY_REGION && FLY_REGION !== PRIMARY_REGION;
-
-    const shouldReplay = isMethodReplayable && isReadOnlyRegion;
-
-    if (!shouldReplay) return next();
-
-    const logInfo = {
-      pathname,
-      method,
-      PRIMARY_REGION,
-      FLY_REGION,
-    };
-    console.info(`Replaying:`, logInfo);
-    res.set("fly-replay", `region=${PRIMARY_REGION}`);
-    return res.sendStatus(409);
-  });
-
-  app.use(compression());
-
-  // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
-  app.disable("x-powered-by");
-
-  // Remix fingerprints its assets so we can cache forever.
+} else {
+  console.log("Starting production server");
   app.use(
-    "/build",
-    express.static("public/build", { immutable: true, maxAge: "1y" }),
+    "/assets",
+    express.static("build/client/assets", { immutable: true, maxAge: "1y" })
   );
-
-  // Everything else (like favicon.ico) is cached for an hour. You may want to be
-  // more aggressive with this caching.
-  app.use(express.static("public", { maxAge: "1h" }));
-
-  app.use(morgan("tiny"));
-
-  app.all("*", remixHandler);
-
-  const port = process.env.PORT || 3000;
-  app.listen(port, () => {
-    console.log(`✅ app ready: http://localhost:${port}`);
-
-    if (process.env.NODE_ENV === "development") {
-      //broadcastDevReady(initialBuild);
-    }
-  });
-
-
-
-  async function reimportServer(): Promise<ServerBuild> {
-    // cjs: manually remove the server build from the require cache
-    Object.keys(require.cache).forEach((key) => {
-      if (key.startsWith(BUILD_PATH)) {
-        delete require.cache[key];
-      }
-    });
-
-    const stat = fs.statSync(BUILD_PATH);
-
-    // convert build path to URL for Windows compatibility with dynamic `import`
-    const BUILD_URL = url.pathToFileURL(BUILD_PATH).href;
-
-    // use a timestamp query parameter to bust the import cache
-    return import(BUILD_URL + "?t=" + stat.mtimeMs);
-  }
-
-  async function createDevRequestHandler(
-    initialBuild: ServerBuild,
-  ): Promise<RequestHandler> {
-    let build = initialBuild;
-    async function handleServerUpdate() {
-      // 1. re-import the server build
-      build = await reimportServer();
-      // 2. tell Remix that this app server is now up-to-date and ready
-      //broadcastDevReady(build);
-    }
-    const chokidar = await import("chokidar");
-    chokidar
-      .watch(VERSION_PATH, { ignoreInitial: true })
-      .on("add", handleServerUpdate)
-      .on("change", handleServerUpdate);
-
-    // wrap request handler to make sure its recreated with the latest build for every request
-    return async (req, res, next) => {
-      try {
-        return createRequestHandler({
-          build,
-          mode: "development",
-        })(req, res, next);
-      } catch (error) {
-        next(error);
-      }
-    };
-  }
+  app.use(express.static("build/client", { maxAge: "1h" }));
+  app.use(await import(BUILD_PATH).then((mod) => mod.app));
 }
+
+app.use(morgan("tiny"));
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

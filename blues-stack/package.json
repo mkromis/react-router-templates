@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm-run-all --sequential build:*",
     "build:client": "react-router build",
-    "build:server": "esbuild --platform=node --format=cjs server/server.ts --outdir=build --bundle --external:fsevents",
+    "build:server": "tsc server/server.ts --outdir build/server --module nodenext",
     "dev": "npm-run-all --parallel dev:*",
     "dev:server": "cross-env NODE_ENV=development npm run build:server -- --watch",
     "dev:client": "react-router dev",

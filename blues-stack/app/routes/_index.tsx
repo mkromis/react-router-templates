@@ -1,11 +1,22 @@
 import type { MetaFunction } from "react-router";
 import { Link } from "react-router";
+import { Route } from "./+types/_index"
 
 import { useOptionalUser } from "~/utils";
 
-export const meta: MetaFunction = () => [{ title: "Remix Notes" }];
+export function meta({}: Route.MetaFunction)
+{
+  return [
+    { title: "React Router Notes" },
+  ]
+}
 
-export default function Index() {
+export function loader({context} : Route.LoaderArgs) {
+  console.log('context:', context);
+  return { message: context.whatever }
+}
+
+export default function Index( {loaderData} : Route.ComponentProps) {
   const user = useOptionalUser();
   return (
     <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
@@ -29,6 +40,9 @@ export default function Index() {
               <p className="mx-auto mt-6 max-w-lg text-center text-xl text-white sm:max-w-3xl">
                 Check the README.md file for instructions on how to get this
                 project deployed.
+              </p>
+              <p className="mx-auto mt-6 max-w-lg text-center text-xl text-white sm:max-w-3xl">
+                Message: {loaderData.message}
               </p>
               <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                 {user ? (
@@ -55,10 +69,10 @@ export default function Index() {
                   </div>
                 )}
               </div>
-              <a href="https://remix.run">
+              <a href="https://reactrouter.com/">
                 <img
-                  src="https://user-images.githubusercontent.com/1500684/158298926-e45dafff-3544-4b69-96d6-d3bcc33fc76a.svg"
-                  alt="Remix"
+                  src="https://reactrouter.com/splash/hero-3d-logo.dark.webp"
+                  alt="React Router 7"
                   className="mx-auto mt-16 w-full max-w-[12rem] md:max-w-[16rem]"
                 />
               </a>

@@ -1,31 +1,29 @@
 {
   "exclude": ["./cypress", "./cypress.config.ts"],
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".react-router/types/**/*"
+    ".react-router/types/**/*",
+    "app/**/*",
+    "app/**/.server/**/*",
+    "app/**/.client/**/*",
+    "server/**/*",
   ],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["@react-router/node", "vite/client", "vitest/globals"],
-    "isolatedModules": true,
+    "baseUrl": ".",
+    "composite": true,
     "esModuleInterop": true,
-    "jsx": "react-jsx",
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "module": "ES2022",
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "rootDirs": [".", "./.react-router/types"],
-    "target": "ES2022",
-    "strict": true,
-    "allowJs": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    "noEmit": true,
     "paths": {
       "~/*": ["./app/*"]
     },
-    "skipLibCheck": true,
-
-    // Remix takes care of building everything in `remix build`.
-    "noEmit": true
+    "resolveJsonModule": true,
+    "rootDirs": [".", "./.react-router/types"],
+    "strict": true,
+    "target": "ES2022",
+    "types": ["@react-router/node", "vite/client", "vitest/globals"],
+    "jsx": "react-jsx",
   }
 }
