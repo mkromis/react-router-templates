@@ -6,7 +6,7 @@ import sourceMapSupport from "source-map-support";
 
 // Short-circuit the type-checking of the built output.
 const BUILD_PATH = "./build/server/index.js";
-const VERSION_PATH = "./build/version.txt";
+// const VERSION_PATH = "./build/version.txt";
 
 const DEVELOPMENT = process.env.NODE_ENV === "development";
 const PORT = Number.parseInt(process.env.PORT || "3000");

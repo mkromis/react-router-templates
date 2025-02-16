@@ -2,7 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
 
-import prom from "@isaacs/express-prometheus-middleware";
 import { createRequestHandler } from "@react-router/express";
 import {  ServerBuild } from "react-router";
 
