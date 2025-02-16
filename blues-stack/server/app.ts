@@ -2,28 +2,8 @@ import "react-router";
 import { createRequestHandler } from "@react-router/express";
 import express from "express";
 
-import prom from "@isaacs/express-prometheus-middleware";
-
 // Main app
 export const app = express();
-
-// Metrics monitor
-const metricsPort = process.env.METRICS_PORT || 3010;
-
-export const metricsApp = express();
-console.log("✅ Main app started");
-metricsApp.listen(metricsPort, () => {
-  console.log(`✅ Metrics ready: http://localhost:${metricsPort}/metrics`);
-});
-
-// Metrics app
-app.use(
-  prom({
-    metricsPath: "/metrics",
-    collectDefaultMetrics: true,
-    metricsApp,
-  }),
-);
 
 // if we're not in the primary region, then we need to make sure all
 // non-GET/HEAD/OPTIONS requests hit the primary region rather than read-only

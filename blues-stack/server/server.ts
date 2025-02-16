@@ -3,6 +3,7 @@ import express from "express";
 import morgan from "morgan";
 
 import sourceMapSupport from "source-map-support";
+import prom from "@isaacs/express-prometheus-middleware";
 
 // Short-circuit the type-checking of the built output.
 const BUILD_PATH = "./build/server/index.js";
@@ -14,6 +15,25 @@ const PORT = Number.parseInt(process.env.PORT || "3000");
 sourceMapSupport.install();
 
 const app = express();
+
+// Metrics monitor, moved here due to double instance creation
+// during dev mode run.
+const metricsPort = process.env.METRICS_PORT || 3010;
+
+export const metricsApp = express();
+console.log("✅ Main app started");
+metricsApp.listen(metricsPort, () => {
+  console.log(`✅ Metrics ready: http://localhost:${metricsPort}/metrics`);
+});
+
+// Metrics app
+app.use(
+  prom({
+    metricsPath: "/metrics",
+    collectDefaultMetrics: true,
+    metricsApp,
+  }),
+);
 
 app.use(compression());
 

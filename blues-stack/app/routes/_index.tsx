@@ -1,4 +1,3 @@
-import type { MetaFunction } from "react-router";
 import { Link } from "react-router";
 import { Route } from "./+types/_index"
 
@@ -12,7 +11,6 @@ export function meta({}: Route.MetaFunction)
 }
 
 export function loader({context} : Route.LoaderArgs) {
-  console.log('context:', context);
   return { message: context.whatever }
 }
 
