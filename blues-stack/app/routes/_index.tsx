@@ -1,24 +1,21 @@
 import { Link } from "react-router";
-import { Route } from "./+types/_index"
+import { Route } from "./+types/_index";
 
 import { useOptionalUser } from "~/utils";
 
-export function meta({}: Route.MetaFunction)
-{
-  return [
-    { title: "React Router Notes" },
-  ]
+export function meta({}: Route.MetaFunction) {
+  return [{ title: "React Router Notes" }];
 }
 
-export function loader({context} : Route.LoaderArgs) {
-  return { message: context.whatever }
+export function loader({ context }: Route.LoaderArgs) {
+  return { message: context.whatever };
 }
 
-export default function Index( {loaderData} : Route.ComponentProps) {
+export default function Index({ loaderData }: Route.ComponentProps) {
   const user = useOptionalUser();
   return (
     <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
-      <div className="relative sm:pb-16 sm:pt-8">
+      <div className="relative sm:pt-8 sm:pb-16">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="relative shadow-xl sm:overflow-hidden sm:rounded-2xl">
             <div className="absolute inset-0">
@@ -29,9 +26,9 @@ export default function Index( {loaderData} : Route.ComponentProps) {
               />
               <div className="absolute inset-0 bg-[color:rgba(27,167,254,0.5)] mix-blend-multiply" />
             </div>
-            <div className="relative px-4 pb-8 pt-16 sm:px-6 sm:pb-14 sm:pt-24 lg:px-8 lg:pb-20 lg:pt-32">
+            <div className="relative px-4 pt-16 pb-8 sm:px-6 sm:pt-24 sm:pb-14 lg:px-8 lg:pt-32 lg:pb-20">
               <h1 className="text-center text-6xl font-extrabold tracking-tight sm:text-8xl lg:text-9xl">
-                <span className="block uppercase text-blue-500 drop-shadow-md">
+                <span className="block text-blue-500 uppercase drop-shadow-md">
                   Blues Stack
                 </span>
               </h1>

@@ -3,7 +3,7 @@ import path from "node:path";
 import url from "node:url";
 
 import { createRequestHandler } from "@react-router/express";
-import {  ServerBuild } from "react-router";
+import { ServerBuild } from "react-router";
 
 import type { RequestHandler } from "express";
 import express from "express";
@@ -15,8 +15,6 @@ async function run() {
   const VERSION_PATH = path.resolve("build/version.txt");
 
   const app = express();
-
-
 
   // Compression
 

@@ -17,14 +17,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return {
       errors: { body: null, title: "Title is required" },
       status: 400,
-    }
+    };
   }
 
   if (typeof body !== "string" || body.length === 0) {
     return {
       errors: { body: "Body is required", title: null },
       status: 400,
-    }
+    };
   }
 
   const note = await createNote({ body, title, userId });
