@@ -1,4 +1,8 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react-router";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "react-router";
 import { redirect } from "react-router";
 import { Form, Link, useActionData, useSearchParams } from "react-router";
 import { useEffect, useRef } from "react";
@@ -23,24 +27,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!validateEmail(email)) {
     return {
       errors: { email: "Email is invalid", password: null },
-      status: 400
-    }
+      status: 400,
+    };
   }
 
   if (typeof password !== "string" || password.length === 0) {
     return {
       errors: { email: null, password: "Password is required" },
       status: 400,
-    }
-
-
+    };
   }
 
   if (password.length < 8) {
     return {
       errors: { email: null, password: "Password is too short" },
       status: 400,
-    }
+    };
   }
 
   const user = await verifyLogin(email, password);
@@ -48,8 +50,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!user) {
     return {
       errors: { email: "Invalid email or password", password: null },
-      status: 400
-    }
+      status: 400,
+    };
   }
 
   return createUserSession({

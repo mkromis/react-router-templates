@@ -5,7 +5,7 @@
     "app/**/*",
     "app/**/.server/**/*",
     "app/**/.client/**/*",
-    "server/**/*",
+    "server/**/*"
   ],
   "compilerOptions": {
     "baseUrl": ".",
@@ -24,6 +24,6 @@
     "strict": true,
     "target": "ES2022",
     "types": ["@react-router/node", "vite/client", "vitest/globals"],
-    "jsx": "react-jsx",
+    "jsx": "react-jsx"
   }
 }

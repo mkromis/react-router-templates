@@ -57,5 +57,5 @@ app.use(
         whatever: "Hello from Express",
       };
     },
-  })
+  }),
 );
