@@ -1,16 +1,13 @@
 // Use this to create a new user and login with that user
 // Simply call this with:
-// npx tsx ./cypress/support/create-user.ts username@example.com
+// npx tsx ./cypress/support/create-user.ts username@example.com,
 // and it will log out the cookie value you can use to interact with the server
 // as that new user.
 
-import { installGlobals } from "react-router";
 import { parse } from "cookie";
 
 import { createUser } from "~/models/user.server";
 import { createUserSession } from "~/session.server";
-
-installGlobals();
 
 async function createAndLogin(email: string) {
   if (!email) {
