@@ -3,10 +3,9 @@ import path from "node:path";
 import url from "node:url";
 
 import { createRequestHandler } from "@react-router/express";
-import { ServerBuild } from "react-router";
-
 import type { RequestHandler } from "express";
 import express from "express";
+import { ServerBuild } from "react-router";
 
 run();
 

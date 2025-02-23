@@ -1,10 +1,9 @@
-import type { ActionFunctionArgs } from "react-router";
-import { redirect } from "react-router";
-import { Form, useActionData } from "react-router";
 import { useEffect, useRef } from "react";
+import type { ActionFunctionArgs } from "react-router";
+import { Form, useActionData, redirect } from "react-router";
 
-import { createNote } from "~/models/note.server";
-import { requireUserId } from "~/session.server";
+import { createNote } from "../models/note.server";
+import { requireUserId } from "../session.server";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);

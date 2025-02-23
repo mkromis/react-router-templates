@@ -1,7 +1,9 @@
 import { Link } from "react-router";
+
+import { useOptionalUser } from "../utils";
+
 import { Route } from "./+types/_index";
 
-import { useOptionalUser } from "~/utils";
 
 export function meta({}: Route.MetaFunction) {
   return [{ title: "React Router Notes" }];

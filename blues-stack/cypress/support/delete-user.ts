@@ -5,7 +5,7 @@
 
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
-import { prisma } from "~/db.server";
+import { prisma } from "../../app/db.server";
 
 async function deleteUser(email: string) {
   if (!email) {
