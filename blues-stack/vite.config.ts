@@ -1,5 +1,4 @@
 /// <reference types="vitest" />
-/// <reference types="vite/client" />
 
 import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
@@ -15,10 +14,10 @@ export default defineConfig(({ isSsrBuild }) => ({
       : undefined,
   },
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
-  // test: {
-  //   globals: true,
-  //   environment: "happy-dom",
-  //   setupFiles: ["./test/setup-test-env.ts"],
-  //   include: ["./app/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-  // },
+  test: {
+    globals: true,
+    environment: "happy-dom",
+    setupFiles: ["./test/setup-test-env.ts"],
+    include: ["./app/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+  },
 }));
