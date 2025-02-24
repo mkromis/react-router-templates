@@ -1,9 +1,9 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "react-router";
 
-import { getNoteListItems } from "~/models/note.server";
-import { requireUserId } from "~/session.server";
-import { useUser } from "~/utils";
+import { getNoteListItems } from "../models/note.server";
+import { requireUserId } from "../session.server";
+import { useUser } from "../utils";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);

@@ -6,8 +6,8 @@
 
 import { parse } from "cookie";
 
-import { createUser } from "~/models/user.server";
-import { createUserSession } from "~/session.server";
+import { createUser } from "../../app/models/user.server";
+import { createUserSession } from "../../app/session.server";
 
 async function createAndLogin(email: string) {
   if (!email) {

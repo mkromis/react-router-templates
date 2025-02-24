@@ -1,15 +1,15 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { redirect } from "react-router";
 import {
   Form,
   isRouteErrorResponse,
   useLoaderData,
   useRouteError,
+  redirect
 } from "react-router";
 import invariant from "tiny-invariant";
 
-import { deleteNote, getNote } from "~/models/note.server";
-import { requireUserId } from "~/session.server";
+import { deleteNote, getNote } from "../models/note.server";
+import { requireUserId } from "../session.server";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);

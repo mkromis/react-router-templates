@@ -1,15 +1,14 @@
+import { useEffect, useRef } from "react";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
 } from "react-router";
-import { redirect } from "react-router";
-import { Form, Link, useActionData, useSearchParams } from "react-router";
-import { useEffect, useRef } from "react";
+import { Form, Link, useActionData, useSearchParams, redirect } from "react-router";
 
-import { createUser, getUserByEmail } from "~/models/user.server";
-import { createUserSession, getUserId } from "~/session.server";
-import { safeRedirect, validateEmail } from "~/utils";
+import { createUser, getUserByEmail } from "../models/user.server";
+import { createUserSession, getUserId } from "../session.server";
+import { safeRedirect, validateEmail } from "../utils";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserId(request);

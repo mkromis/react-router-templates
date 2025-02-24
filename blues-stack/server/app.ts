@@ -51,6 +51,7 @@ app.use((req, res, next) => {
 app.use(
   createRequestHandler({
     // @ts-expect-error - virtual module provided by React Router at build time
+    // eslint-disable-next-line import/no-unresolved
     build: () => import("virtual:react-router/server-build"),
     getLoadContext() {
       return {
