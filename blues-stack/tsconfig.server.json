@@ -3,6 +3,7 @@
   "include": ["server.mjs", "tailwind.config.ts", "vite.config.ts"],
   "compilerOptions": {
     "composite": true,
+    "esModuleInterop": true,
     "strict": true,
     "types": ["node"],
     "lib": ["ES2022"],
