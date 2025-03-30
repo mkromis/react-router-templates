@@ -258,8 +258,21 @@ async function main(): Promise<void> {
     fs.rm(path.join(rootDirectory, ".github", "dependabot.yml")),
     fs.rm(path.join(rootDirectory, ".github", "PULL_REQUEST_TEMPLATE.md")),
     fs.rm(path.join(rootDirectory, "LICENSE.md")),
+    fs.rm(path.join(rootDirectory, "remix.init"), {
+      recursive: true,
+    })
   ]);
 
+  // execSync(`${pm.name} uninstall @iarna/toml`, {
+  //   cwd: rootDirectory,
+  //   stdio: "inherit",
+  // });
+  
+  execSync(`${pm.name} uninstall @npmcli/package-json`, {
+    cwd: rootDirectory,
+    stdio: "inherit",
+  });
+  
   execSync(pm.run("format", "--log-level warn"), {
     cwd: rootDirectory,
     stdio: "inherit",
