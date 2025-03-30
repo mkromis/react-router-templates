@@ -1,13 +1,15 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import * as path from "node:path";
 
 import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
+
+import { fileURLToPath } from "node:url";
 import { FlatCompat } from "@eslint/eslintrc";
+
 import js from "@eslint/js";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import * as tsParser from "@typescript-eslint/parser";
+import tsParser from "@typescript-eslint/parser";
+import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
 import cypress from "eslint-plugin-cypress";
-import _import from "eslint-plugin-import";
+import importPlugin from "eslint-plugin-import";
 import jest from "eslint-plugin-jest";
 import jestDom from "eslint-plugin-jest-dom";
 import jsxA11Y from "eslint-plugin-jsx-a11y";
@@ -15,6 +17,7 @@ import markdown from "eslint-plugin-markdown";
 import react from "eslint-plugin-react";
 import testingLibrary from "eslint-plugin-testing-library";
 import globals from "globals";
+import tseslint from "typescript-eslint";
 
 /**
  * This is intended to be a basic starting point for linting in the Blues Stack.
@@ -30,33 +33,35 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-export default [
+export default tseslint.config(
   js.configs.recommended,
+  js.configs.all,
+  tseslint.configs.recommended,
+  tseslint.configs.strict,
+  tseslint.configs.stylistic,
   {
     files: ["**/*.{js,jsx}"],
     ignores: ["build/**/*", ".react-router/**/*"],
   },
-    {
-        files: ["**/*.{ts,tsx}"],
-        ignores: ["build/", ".react-router/**/*"],
-        languageOptions: {
-            globals: {
-                ...globals.browser,
-                ...globals.commonjs,
-            },
-            
-            ecmaVersion: "latest",
-            sourceType: "module",
-            
-            parserOptions: {
-              ecmaFeatures: {
-                    jsx: true,
-                },
-            },
+  {
+    files: ["**/*.{ts,tsx}"],
+    ignores: ["build/", ".react-router/**/*"],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.commonjs,
+      },
+
+      ecmaVersion: "latest",
+      sourceType: "module",
+
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
         },
+      },
     },
-    //js.configs.recommended,
-    //js.configs.all,
+  },
 
   ...fixupConfigRules(
     compat.extends(
@@ -109,13 +114,7 @@ export default [
     },
   },
   ...fixupConfigRules(
-    compat.extends(
-      "plugin:@typescript-eslint/recommended",
-      "plugin:@typescript-eslint/stylistic",
-      "plugin:import/recommended",
-      "plugin:import/typescript",
-      "prettier",
-    ),
+    compat.extends("plugin:import/typescript", "prettier"),
   ).map((config) => ({
     ...config,
     files: ["**/*.{ts,tsx}"],
@@ -126,8 +125,7 @@ export default [
     ignores: ["build/**/*", ".react-router/**/*"],
 
     plugins: {
-      "@typescript-eslint": fixupPluginRules(typescriptEslint),
-      import: fixupPluginRules(_import),
+      import: fixupPluginRules(importPlugin),
     },
 
     languageOptions: {
@@ -136,16 +134,12 @@ export default [
 
     settings: {
       "import/internal-regex": "^~/",
-
-      "import/resolver": {
-        node: {
-          extensions: [".ts", ".tsx"],
-        },
-
-        typescript: {
+      "import-x/resolver-next": [
+        createTypeScriptImportResolver({
           alwaysTryTypes: true,
-        },
-      },
+          extensions: [".ts", ".tsx"],
+        }),
+      ],
     },
 
     rules: {
@@ -231,4 +225,4 @@ export default [
       },
     },
   },
-];
+);
