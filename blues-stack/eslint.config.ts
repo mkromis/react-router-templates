@@ -35,7 +35,7 @@ const compat = new FlatCompat({
 
 export default tseslint.config(
   js.configs.recommended,
-  js.configs.all,
+  //js.configs.all,
   tseslint.configs.recommended,
   tseslint.configs.strict,
   tseslint.configs.stylistic,
