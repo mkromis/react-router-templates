@@ -2,7 +2,7 @@ import type { LinksFunction, LoaderFunctionArgs } from "react-router";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
 import { getUser } from "./session.server";
-import stylesheet from "./tailwind.css?url";
+import stylesheet from "./style/tailwind.css?url";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -14,7 +14,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function App() {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full" data-theme="light">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
