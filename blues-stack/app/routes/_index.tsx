@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { useOptionalUser } from "../utils";
 
 import { Route } from "./+types/_index";
+import ThemeToggle from "~/components/ThemeToggle";
 
 // eslint-disable-next-line no-empty-pattern
 export function meta({ }: Route.MetaFunction) {
@@ -34,11 +35,12 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                   Blues Stack
                 </span>
               </h1>
-              <p className="mx-auto mt-6 max-w-lg text-center text-xl text-overlay0 sm:max-w-3xl">
+              <p className="mx-auto mt-6 max-w-lg text-center bg-subtext0 text-xl sm:max-w-3xl">
                 Check the README.md file for instructions on how to get this
                 project deployed.
               </p>
-              <p className="mx-auto mt-6 max-w-lg text-center text-xl text-bl sm:max-w-3xl">
+              <p className="mx-auto mt-6 max-w-lg text-center bg-subtext1
+               text-xl text-bl sm:max-w-3xl">
                 Message: {loaderData.message}
               </p>
               <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
@@ -49,11 +51,12 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                   >
                     View Notes for {user.email}
                   </Link>
+
                 ) : (
                   <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
                     <Link
                       to="/join"
-                      className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 font-medium text-blue-700 shadow-xs hover:bg-blue-50 sm:px-8"
+                      className="flex items-center justify-center rounded-md border border-transparent bg-base px-4 py-3 font-medium text-blue-700 shadow-xs hover:bg-blue-50 sm:px-8"
                     >
                       Sign up
                     </Link>
@@ -63,6 +66,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                     >
                       Log In
                     </Link>
+                    <ThemeToggle />
                   </div>
                 )}
               </div>
@@ -139,7 +143,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
               <a
                 key={img.href}
                 href={img.href}
-                className="flex h-16 w-32 justify-center p-1 grayscale transition hover:grayscale-0 focus:grayscale-0"
+                className="flex h-16 w-32 justify-center p-1 grayscale-90 transition hover:grayscale-0 focus:grayscale-0"
               >
                 <img alt={img.alt} src={img.src} className="object-contain" />
               </a>

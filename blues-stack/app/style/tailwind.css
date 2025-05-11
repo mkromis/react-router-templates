@@ -380,5 +380,38 @@
 }
 
 :root {
-  background-color: var(--color-base);
+  --radius: 0.5rem;
+  background: var(--color-base);
+  --background: var(--color-base);
+  --foreground: var(--color-text);
+  --card: var(--color-text);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: var(--color-overlay0);
+  --popover-foreground: var(--color-text);
+  --primary: var(--color-lavender-500);
+  --primary-foreground: var(--color-subtext0);
+  --secondary: var(--color-overlay1);
+  --secondary-foreground: var(--color-subtext1);
+  --muted: var(--color-overlay2);
+  --muted-foreground: var(--color-subtext1);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+  --destructive: var(--color-red);
+  --border: var(--color-lavender);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: var(--color-lavender);
+  --chart-1: var(--color-red);
+  --chart-2: var(--color-peach);
+  --chart-3: var(--color-yellow);
+  --chart-4: var(--color-green);
+  --chart-5: var(--color-sapphire);
+  --chart-6: var(--color-lavender);
+  --sidebar: var(--color-overlay0);
+  --sidebar-foreground: var(--color-text)
+    --sidebar-primary: var(--color-overlay1);
+  --sidebar-primary-foreground: var(--color-text);
+  --sidebar-accent: var(--color-overlay2);
+  --sidebar-accent-foreground: var(--color-text);
+  --sidebar-border: var(--color-lavender);
+  --sidebar-ring: var(--color-lavender);
 }
